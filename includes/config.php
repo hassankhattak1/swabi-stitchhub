@@ -2,10 +2,10 @@
 // includes/config.php
 
 // Database Configuration
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'stitchhub_db');
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_USER', getenv('DB_USER') ?: 'root');
+define('DB_PASS', getenv('DB_PASS') ?: '');
+define('DB_NAME', getenv('DB_NAME') ?: 'stitchhub_db');
 
 // Session Start
 if (session_status() == PHP_SESSION_NONE) {
