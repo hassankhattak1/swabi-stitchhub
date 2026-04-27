@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Complete Profile - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <h2>Complete Your Tailor Profile</h2>
+        <p class="text-muted mb-3">Fill in your details for verification by admin.</p>
+        
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label for="cnic">CNIC Number *</label>
+                <input type="text" id="cnic" name="cnic" class="form-control" placeholder="1234567890123" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="location">Location (Swabi) *</label>
+                <input type="text" id="location" name="location" class="form-control" placeholder="Main Market, Swabi" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="experience">Years of Experience</label>
+                <input type="text" id="experience" name="experience" class="form-control" placeholder="e.g., 5 years">
+            </div>
+            
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea id="bio" name="bio" class="form-control" rows="4" placeholder="Tell customers about your expertise..."></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Submit for Verification</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

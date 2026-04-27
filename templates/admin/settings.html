@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <h1>Settings</h1>
+    </div>
+    
+    <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <h3>Platform Configuration</h3>
+        
+        <div class="form-group mt-2">
+            <label>Commission Rate</label>
+            <p class="text-muted">Currently set to 10% per completed order</p>
+        </div>
+        
+        <div class="form-group mt-2">
+            <label>Payment Gateway</label>
+            <p class="text-muted">Simulated payment system (Demo Mode)</p>
+        </div>
+        
+        <div class="form-group mt-2">
+            <label>Verification Process</label>
+            <p class="text-muted">Tailors require manual verification by admin</p>
+        </div>
+        
+        <div class="alert alert-info mt-2">
+            <i class="fas fa-info-circle"></i> These settings are configured in the application code. Contact the developer to make changes.
+        </div>
+    </div>
+</div>
+{% endblock %}

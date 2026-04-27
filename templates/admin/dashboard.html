@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <h1>Admin Dashboard</h1>
+        <p class="text-muted">Manage the StitchHub platform</p>
+    </div>
+    
+    <div class="stats-grid">
+        <a href="{{ url_for('admin.customers') }}" class="stat-card" style="text-decoration: none; color: inherit;">
+            <div class="stat-icon primary">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ total_users }}</h3>
+                <p>Total Users</p>
+            </div>
+        </a>
+        <a href="{{ url_for('admin.tailors') }}" class="stat-card" style="text-decoration: none; color: inherit;">
+            <div class="stat-icon info">
+                <i class="fas fa-user-tailor"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ total_tailors }}</h3>
+                <p>Total Tailors</p>
+            </div>
+        </a>
+        <a href="{{ url_for('admin.tailors', status='verified') }}" class="stat-card" style="text-decoration: none; color: inherit;">
+            <div class="stat-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ verified_tailors }}</h3>
+                <p>Verified Tailors</p>
+            </div>
+        </a>
+        <a href="{{ url_for('admin.tailors', status='pending') }}" class="stat-card" style="text-decoration: none; color: inherit;">
+            <div class="stat-icon warning">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ pending_tailors }}</h3>
+                <p>Pending Verification</p>
+            </div>
+        </a>
+    </div>
+    
+    <div class="stats-grid">
+        <a href="{{ url_for('admin.orders') }}" class="stat-card" style="text-decoration: none; color: inherit;">
+            <div class="stat-icon primary">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ total_orders }}</h3>
+                <p>Total Orders</p>
+            </div>
+        </a>
+        <a href="{{ url_for('admin.orders', status='pending') }}" class="stat-card" style="text-decoration: none; color: inherit;">
+            <div class="stat-icon warning">
+                <i class="fas fa-hourglass-half"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ pending_orders }}</h3>
+                <p>Pending Orders</p>
+            </div>
+        </a>
+        <a href="{{ url_for('admin.orders', status='delivered') }}" class="stat-card" style="text-decoration: none; color: inherit;">
+            <div class="stat-icon success">
+                <i class="fas fa-check"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ completed_orders }}</h3>
+                <p>Completed Orders</p>
+            </div>
+        </a>
+        <a href="{{ url_for('admin.payments') }}" class="stat-card" style="text-decoration: none; color: inherit;">
+            <div class="stat-icon info">
+                <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <div class="stat-content">
+                <h3>PKR {{ total_revenue }}</h3>
+                <p>Total Revenue</p>
+            </div>
+        </a>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Recent Orders</h2>
+            <a href="{{ url_for('admin.orders') }}" class="btn btn-primary">View All</a>
+        </div>
+        
+        {% if recent_orders %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Tailor</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in recent_orders %}
+                    <tr>
+                        <td>#{{ order.id }}</td>
+                        <td>{{ order.customer.name }}</td>
+                        <td>{{ order.tailor.name }}</td>
+                        <td>PKR {{ order.total_amount }}</td>
+                        <td>
+                            <span class="badge badge-{{ order.status }}">{{ order.status|title }}</span>
+                        </td>
+                        <td>{{ order.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            <a href="{{ url_for('admin.order_detail', order_id=order.id) }}" class="btn btn-primary btn-sm">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-shopping-bag"></i>
+            <p>No orders yet.</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="stats-grid mt-3">
+        <a href="{{ url_for('admin.reports') }}" class="stat-card" style="text-decoration: none; color: inherit;">
+            <div class="stat-icon primary">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stat-content">
+                <p>View Reports</p>
+            </div>
+        </a>
+        <a href="{{ url_for('admin.reviews') }}" class="stat-card" style="text-decoration: none; color: inherit;">
+            <div class="stat-icon warning">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-content">
+                <p>View Reviews</p>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

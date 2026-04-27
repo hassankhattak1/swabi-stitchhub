@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Reports - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <h1>Reports & Analytics</h1>
+    </div>
+    
+    <div class="filters mb-3">
+        <form method="GET" action="{{ url_for('admin.reports') }}">
+            <div class="form-group">
+                <label for="period">Time Period</label>
+                <select id="period" name="period" class="form-control" onchange="this.form.submit()" style="width: 200px;">
+                    <option value="week" {% if period == 'week' %}selected{% endif %}>Last 7 Days</option>
+                    <option value="month" {% if period == 'month' %}selected{% endif %}>Last 30 Days</option>
+                    <option value="year" {% if period == 'year' %}selected{% endif %}>Last Year</option>
+                </select>
+            </div>
+        </form>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon primary">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ orders|length }}</h3>
+                <p>Total Orders</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon success">
+                <i class="fas fa-check"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ completed }}</h3>
+                <p>Completed</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon warning">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ pending }}</h3>
+                <p>Pending</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon info">
+                <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <div class="stat-content">
+                <h3>PKR {{ revenue }}</h3>
+                <p>Revenue</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Top Performing Tailors</h2>
+        </div>
+        
+        {% if tailor_stats %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tailor</th>
+                        <th>Location</th>
+                        <th>Orders</th>
+                        <th>Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in tailor_stats %}
+                    <tr>
+                        <td>{{ stat.tailor.name }}</td>
+                        <td>{{ stat.tailor.tailor_profile.location if stat.tailor.tailor_profile else 'N/A' }}</td>
+                        <td>{{ stat.orders }}</td>
+                        <td>PKR {{ stat.revenue }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-chart-bar"></i>
+            <p>No data available.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

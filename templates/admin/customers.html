@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Users - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <h1>All Users</h1>
+    </div>
+    
+    <div class="filters mb-3">
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('admin.customers', role='customer') }}" class="btn {% if role_filter == 'customer' %}btn-primary{% else %}btn-outline{% endif %}">Customers</a>
+            <a href="{{ url_for('admin.customers', role='tailor') }}" class="btn {% if role_filter == 'tailor' %}btn-primary{% else %}btn-outline{% endif %}">Tailors</a>
+            <a href="{{ url_for('admin.customers', role='all') }}" class="btn {% if role_filter == 'all' %}btn-primary{% else %}btn-outline{% endif %}">All Users</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        {% if users %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Phone</th>
+                        <th>Joined</th>
+                        <th>Orders</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td><span class="badge badge-{{ user.role }}">{{ user.role|title }}</span></td>
+                        <td>{{ user.phone or 'N/A' }}</td>
+                        <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ user.order_count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-users"></i>
+            <p>No users found.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

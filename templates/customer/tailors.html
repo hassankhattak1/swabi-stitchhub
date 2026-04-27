@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Find Tailors - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <h1>Find Verified Tailors</h1>
+        <p class="text-muted">Browse and connect with verified women tailors in Swabi</p>
+    </div>
+    
+    <div class="filters">
+        <form method="GET" action="{{ url_for('customer.tailors') }}">
+            <div class="form-group">
+                <label for="search">Search by Name</label>
+                <input type="text" id="search" name="search" class="form-control" placeholder="Tailor name..." value="{{ request.args.get('search', '') }}">
+            </div>
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" class="form-control" placeholder="Location..." value="{{ request.args.get('location', '') }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a href="{{ url_for('customer.tailors') }}" class="btn btn-outline">Clear</a>
+        </form>
+    </div>
+    
+    {% if tailors %}
+    <div class="tailor-grid">
+        {% for tailor in tailors %}
+        <div class="tailor-card">
+            <div class="tailor-image">
+                <i class="fas fa-female"></i>
+            </div>
+            <div class="tailor-info">
+                <h3 class="tailor-name">{{ tailor.name }}</h3>
+                <p class="tailor-location">
+                    <i class="fas fa-map-marker-alt"></i> 
+                    {% if tailor.tailor_profile %}{{ tailor.tailor_profile.location }}{% endif %}
+                </p>
+                <div class="tailor-rating">
+                    <i class="fas fa-star"></i>
+                    <span>{{ "%.1f"|format(tailor.get_rating()) }}</span>
+                    <span class="text-muted">({{ tailor.review_count }})</span>
+                </div>
+                {% if tailor.tailor_profile and tailor.tailor_profile.experience %}
+                <p class="text-muted mt-1"><small>Experience: {{ tailor.tailor_profile.experience }}</small></p>
+                {% endif %}
+                <a href="{{ url_for('customer.tailor_profile', tailor_id=tailor.id) }}" class="btn btn-primary mt-2" style="width: 100%;">View Profile</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-user-tailor"></i>
+        <p>No verified tailors found matching your criteria.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

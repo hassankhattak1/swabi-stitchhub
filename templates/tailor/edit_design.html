@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Design - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <h2>Edit Design</h2>
+        
+        <form method="POST">
+            <div class="form-group">
+                <label for="title">Design Title</label>
+                <input type="text" id="title" name="title" class="form-control" value="{{ design.title }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" class="form-control" rows="3">{{ design.description }}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="image_url">Image URL</label>
+                <input type="url" id="image_url" name="image_url" class="form-control" value="{{ design.image_url or '' }}">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="price">Price (PKR)</label>
+                    <input type="number" step="0.01" id="price" name="price" class="form-control" value="{{ design.price }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" name="category" class="form-control">
+                        <option value="suits" {% if design.category == 'suits' %}selected{% endif %}>Suits</option>
+                        <option value="shirts" {% if design.category == 'shirts' %}selected{% endif %}>Shirts</option>
+                        <option value="trousers" {% if design.category == 'trousers' %}selected{% endif %}>Trousers</option>
+                        <option value="kurti" {% if design.category == 'kurti' %}selected{% endif %}>Kurti</option>
+                        <option value="shalwar" {% if design.category == 'shalwar' %}selected{% endif %}>Shalwar</option>
+                        <option value="other" {% if design.category == 'other' %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Update Design</button>
+                <a href="{{ url_for('tailor.designs') }}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

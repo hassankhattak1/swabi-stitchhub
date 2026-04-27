@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Reviews - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <h1>Reviews</h1>
+    </div>
+    
+    <div class="card">
+        {% if reviews %}
+        {% for review in reviews %}
+        <div class="order-section">
+            <div class="d-flex justify-between">
+                <div>
+                    <strong>{{ review.customer.name }}</strong> → <strong>{{ review.tailor.name }}</strong>
+                    <div class="rating mt-1">
+                        {% for i in range(5) %}
+                        <i class="fas fa-star {% if i < review.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="text-muted">{{ review.created_at.strftime('%Y-%m-%d') }}</div>
+            </div>
+            {% if review.comment %}
+            <p class="mt-2">{{ review.comment }}</p>
+            {% endif %}
+            <p class="text-muted mt-1"><small>Order #{{ review.order.id }}</small></p>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-star"></i>
+            <p>No reviews yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

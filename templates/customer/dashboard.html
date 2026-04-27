@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <h1>Welcome, {{ current_user.name }}!</h1>
+        <p class="text-muted">Manage your orders and find the perfect tailor</p>
+    </div>
+    
+    <div class="stats-grid">
+        <a href="{{ url_for('customer.tailors') }}" class="stat-card" style="text-decoration: none; color: inherit;">
+            <div class="stat-icon primary">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="stat-content">
+                <p>Find Tailors</p>
+            </div>
+        </a>
+        <a href="{{ url_for('customer.measurements') }}" class="stat-card" style="text-decoration: none; color: inherit;">
+            <div class="stat-icon success">
+                <i class="fas fa-ruler"></i>
+            </div>
+            <div class="stat-content">
+                <p>My Measurements</p>
+            </div>
+        </a>
+        <div class="stat-card">
+            <div class="stat-icon warning">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ orders|length }}</h3>
+                <p>Total Orders</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon info">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ orders|selectattr('status', 'equalto', 'delivered')|list|length }}</h3>
+                <p>Completed</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">My Orders</h2>
+            <a href="{{ url_for('customer.tailors') }}" class="btn btn-primary">Find New Tailor</a>
+        </div>
+        
+        {% if orders %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Tailor</th>
+                        <th>Design</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>#{{ order.id }}</td>
+                        <td>{{ order.tailor.name }}</td>
+                        <td>{{ order.design.title if order.design else 'Custom' }}</td>
+                        <td>PKR {{ order.total_amount }}</td>
+                        <td>
+                            <span class="badge badge-{{ order.status }}">{{ order.status|title }}</span>
+                        </td>
+                        <td>{{ order.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            {% if order.status == 'pending' %}
+                            <a href="{{ url_for('customer.cancel_order', order_id=order.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Cancel this order?')">Cancel</a>
+                            {% endif %}
+                            {% if order.status == 'delivered' and not order.review %}
+                            <a href="{{ url_for('customer.review_order', order_id=order.id) }}" class="btn btn-primary btn-sm">Review</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-shopping-bag"></i>
+            <p>No orders yet. <a href="{{ url_for('customer.tailors') }}">Find a tailor</a> to place your first order!</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="card mt-3">
+        <div class="card-header">
+            <h2 class="card-title">Quick Actions</h2>
+        </div>
+        <div class="d-flex gap-2" style="flex-wrap: wrap;">
+            <a href="{{ url_for('customer.tailors') }}" class="btn btn-primary">Find Tailors</a>
+            <a href="{{ url_for('customer.measurements') }}" class="btn btn-secondary">Save Measurements</a>
+            <a href="{{ url_for('customer.add_measurement') }}" class="btn btn-outline">Add New Measurement</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

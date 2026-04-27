@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Payment - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <h2><i class="fas fa-credit-card"></i> Payment</h2>
+        
+        <div class="order-section">
+            <h3>Order Summary</h3>
+            <p><strong>Order ID:</strong> #{{ order.id }}</p>
+            <p><strong>Tailor:</strong> {{ order.tailor.name }}</p>
+            <p><strong>Design:</strong> {{ order.design.title if order.design else 'Custom Order' }}</p>
+            <p><strong>Delivery:</strong> {{ order.delivery_type|title }}</p>
+            <hr>
+            <h3 class="text-primary">Total Amount: PKR {{ order.total_amount }}</h3>
+        </div>
+        
+        <div class="order-section">
+            <h3>Payment Method</h3>
+            <p class="text-muted">Simulated payment gateway (Demo Mode)</p>
+            
+            <form method="POST">
+                <div class="form-group">
+                    <label>Card Number (Simulated)</label>
+                    <input type="text" class="form-control" value="4242 4242 4242 4242" disabled>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Expiry (Simulated)</label>
+                        <input type="text" class="form-control" value="12/28" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>CVV (Simulated)</label>
+                        <input type="text" class="form-control" value="123" disabled>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success btn-lg" style="width: 100%;">Pay PKR {{ order.total_amount }}</button>
+            </form>
+        </div>
+        
+        <p class="text-center text-muted mt-2">
+            <small>This is a simulated payment. No real money will be charged.</small>
+        </p>
+    </div>
+</div>
+{% endblock %}

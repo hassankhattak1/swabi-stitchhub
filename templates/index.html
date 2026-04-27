@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Swabi StitchHub - Online Tailor Booking{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <h1>Welcome to StitchHub</h1>
+        <p>Your trusted platform for connecting with verified women tailors in Swabi</p>
+        <div class="d-flex justify-center gap-2">
+            <a href="{{ url_for('auth.register') }}" class="btn btn-white">Get Started</a>
+            <a href="#tailors" class="btn btn-outline-white">View Tailors</a>
+        </div>
+    </div>
+</section>
+
+<section id="features" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-3">Why Choose StitchHub?</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon primary">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Verified Tailors</h3>
+                    <p>All tailors verified by admin</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon success">
+                    <i class="fas fa-ruler"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Custom Measurements</h3>
+                    <p>Save your measurements for perfect fit</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon warning">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Secure Payments</h3>
+                    <p>Safe and secure payment system</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon info">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Rate & Review</h3>
+                    <p>Rate your experience</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="tailors" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-3">Featured Tailors</h2>
+        <p class="text-center text-muted mb-3">Verified women tailors in Swabi ready to serve you</p>
+        
+        {% if tailors %}
+        <div class="tailor-grid">
+            {% for tailor in tailors %}
+            <div class="tailor-card">
+                <div class="tailor-image">
+                    <i class="fas fa-female"></i>
+                </div>
+                <div class="tailor-info">
+                    <h3 class="tailor-name">{{ tailor.name }}</h3>
+                    <p class="tailor-location">
+                        <i class="fas fa-map-marker-alt"></i> 
+                        {% if tailor.tailor_profile %}{{ tailor.tailor_profile.location }}{% endif %}
+                    </p>
+                    <div class="tailor-rating">
+                        <i class="fas fa-star"></i>
+                        <span>{{ "%.1f"|format(tailor.get_rating()) }}</span>
+                        <span class="text-muted">({{ tailor.review_count }} reviews)</span>
+                    </div>
+                    {% if current_user.is_authenticated and current_user.role == 'customer' %}
+                    <a href="{{ url_for('customer.tailor_profile', tailor_id=tailor.id) }}" class="btn btn-primary mt-2" style="width: 100%;">View Profile</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-user-tailor"></i>
+            <p>No verified tailors yet. Register as a tailor to get started!</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="py-5" style="background: var(--light-color);">
+    <div class="container">
+        <h2 class="text-center mb-3">How It Works</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon primary">1</div>
+                <div class="stat-content">
+                    <h3>Register</h3>
+                    <p>Create your account as a customer or tailor</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon success">2</div>
+                <div class="stat-content">
+                    <h3>Find Tailor</h3>
+                    <p>Search and browse verified tailors</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon warning">3</div>
+                <div class="stat-content">
+                    <h3>Place Order</h3>
+                    <p>Select design and provide measurements</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon info">4</div>
+                <div class="stat-content">
+                    <h3>Get Delivered</h3>
+                    <p>Receive your perfectly stitched outfit</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.btn-white {
+    background: var(--white);
+    color: var(--primary-color);
+}
+.btn-white:hover {
+    background: var(--light-color);
+}
+.btn-outline-white {
+    border: 2px solid var(--white);
+    color: var(--white);
+    background: transparent;
+}
+.btn-outline-white:hover {
+    background: var(--white);
+    color: var(--primary-color);
+}
+.justify-center {
+    justify-content: center;
+}
+.py-5 {
+    padding: 60px 0;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Tailors - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <h1>Manage Tailors</h1>
+    </div>
+    
+    <div class="filters">
+        <form method="GET" action="{{ url_for('admin.tailors') }}">
+            <div class="form-group">
+                <label for="status">Filter by Status</label>
+                <select id="status" name="status" class="form-control" onchange="this.form.submit()">
+                    <option value="">All Tailors</option>
+                    <option value="pending" {% if status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="verified" {% if status == 'verified' %}selected{% endif %}>Verified</option>
+                    <option value="rejected" {% if status == 'rejected' %}selected{% endif %}>Rejected</option>
+                </select>
+            </div>
+        </form>
+    </div>
+    
+    <div class="card">
+        {% if tailors %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>CNIC</th>
+                        <th>Location</th>
+                        <th>Experience</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tailor in tailors %}
+                    {% set profile = tailor.tailor_profile %}
+                    <tr>
+                        <td>{{ tailor.name }}</td>
+                        <td>{{ tailor.email }}</td>
+                        <td>{{ tailor.phone }}</td>
+                        <td>{{ profile.cnic if profile else 'N/A' }}</td>
+                        <td>{{ profile.location if profile else 'N/A' }}</td>
+                        <td>{{ profile.experience if profile else 'N/A' }}</td>
+                        <td>
+                            <span class="badge badge-{{ profile.verification_status if profile else 'pending' }}">{{ profile.verification_status if profile else 'pending'|title }}</span>
+                        </td>
+                        <td>
+                            {% if profile and profile.verification_status == 'pending' %}
+                            <a href="{{ url_for('admin.verify_tailor', user_id=tailor.id) }}" class="btn btn-success btn-sm">Verify</a>
+                            <a href="{{ url_for('admin.reject_tailor', user_id=tailor.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Reject this tailor?')">Reject</a>
+                            {% elif profile and profile.verification_status == 'verified' %}
+                            <span class="text-success"><i class="fas fa-check"></i> Verified</span>
+                            {% elif profile and profile.verification_status == 'rejected' %}
+                            <span class="text-danger"><i class="fas fa-times"></i> Rejected</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-user-tailor"></i>
+            <p>No tailors found.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Order #{{ order.id }} - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="order-detail">
+        <div class="d-flex mb-2">
+            <a href="{{ url_for('admin.orders') }}" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+        
+        <div class="card">
+            <h2>Order #{{ order.id }}</h2>
+            
+            <div class="order-section">
+                <h3>Customer</h3>
+                <p><strong>Name:</strong> {{ order.customer.name }}</p>
+                <p><strong>Email:</strong> {{ order.customer.email }}</p>
+                <p><strong>Phone:</strong> {{ order.customer.phone }}</p>
+            </div>
+            
+            <div class="order-section">
+                <h3>Tailor</h3>
+                <p><strong>Name:</strong> {{ order.tailor.name }}</p>
+                <p><strong>Email:</strong> {{ order.tailor.email }}</p>
+            </div>
+            
+            <div class="order-section">
+                <h3>Order Details</h3>
+                <p><strong>Design:</strong> {{ order.design.title if order.design else 'Custom Order' }}</p>
+                <p><strong>Delivery Type:</strong> {{ order.delivery_type|title }}</p>
+                {% if order.delivery_address %}
+                <p><strong>Delivery Address:</strong> {{ order.delivery_address }}</p>
+                {% endif %}
+                <p><strong>Total Amount:</strong> PKR {{ order.total_amount }}</p>
+                <p><strong>Commission (10%):</strong> PKR {{ order.commission_amount }}</p>
+                <p><strong>Status:</strong> <span class="badge badge-{{ order.status }}">{{ order.status|title }}</span></p>
+                <p><strong>Date:</strong> {{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                {% if order.notes %}
+                <p><strong>Notes:</strong> {{ order.notes }}</p>
+                {% endif %}
+            </div>
+            
+            <div class="order-section">
+                <h3>Payment</h3>
+                {% set payment = order.payments.first() %}
+                {% if payment %}
+                <p><strong>Amount:</strong> PKR {{ payment.amount }}</p>
+                <p><strong>Status:</strong> <span class="badge badge-{{ payment.status }}">{{ payment.status|replace('_', ' ')|title }}</span></p>
+                <p><strong>Transaction ID:</strong> {{ payment.transaction_id }}</p>
+                {% if payment.status == 'paid_to_admin' and order.status in ['completed', 'delivered'] %}
+                <a href="{{ url_for('admin.transfer_payment', payment_id=payment.id) }}" class="btn btn-success mt-2">Transfer to Tailor</a>
+                {% endif %}
+                {% else %}
+                <p class="text-muted">No payment found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

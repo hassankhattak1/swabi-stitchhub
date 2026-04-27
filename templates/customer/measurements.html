@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}My Measurements - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <h1>My Measurements</h1>
+        <p class="text-muted">Save your body measurements for perfect fits</p>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Saved Measurements</h2>
+            <a href="{{ url_for('customer.add_measurement') }}" class="btn btn-primary">Add New</a>
+        </div>
+        
+        {% if measurements %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Chest</th>
+                        <th>Waist</th>
+                        <th>Hips</th>
+                        <th>Shoulder</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in measurements %}
+                    <tr>
+                        <td><strong>{{ m.title }}</strong></td>
+                        <td>{{ m.chest }}"</td>
+                        <td>{{ m.waist }}"</td>
+                        <td>{{ m.hips }}"</td>
+                        <td>{{ m.shoulder }}"</td>
+                        <td>{{ m.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            <a href="{{ url_for('customer.delete_measurement', id=m.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Delete this measurement?')">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-ruler"></i>
+            <p>No measurements saved yet. <a href="{{ url_for('customer.add_measurement') }}">Add your first measurement</a></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

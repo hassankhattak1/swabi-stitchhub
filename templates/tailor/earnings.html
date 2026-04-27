@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}My Earnings - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <h1>My Earnings</h1>
+        <p class="text-muted">Track your income and commissions</p>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon success">
+                <i class="fas fa-wallet"></i>
+            </div>
+            <div class="stat-content">
+                <h3>PKR {{ total_earnings }}</h3>
+                <p>Total Earnings</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon warning">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-content">
+                <h3>PKR {{ pending_payments }}</h3>
+                <p>Pending Payment</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Order Earnings</h2>
+        </div>
+        
+        {% if orders %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Total Amount</th>
+                        <th>Commission (10%)</th>
+                        <th>Net Earnings</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>#{{ order.id }}</td>
+                        <td>{{ order.customer.name }}</td>
+                        <td>PKR {{ order.total_amount }}</td>
+                        <td>PKR {{ order.commission_amount }}</td>
+                        <td>PKR {{ order.total_amount - order.commission_amount }}</td>
+                        <td>
+                            <span class="badge badge-{{ order.status }}">{{ order.status|title }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-wallet"></i>
+            <p>No completed orders yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Payments - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <h1>Payments</h1>
+    </div>
+    
+    <div class="filters">
+        <form method="GET" action="{{ url_for('admin.payments') }}">
+            <div class="form-group">
+                <label for="status">Filter by Status</label>
+                <select id="status" name="status" class="form-control" onchange="this.form.submit()">
+                    <option value="">All Payments</option>
+                    <option value="pending" {% if status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="paid_to_admin" {% if status == 'paid_to_admin' %}selected{% endif %}>Paid to Admin</option>
+                    <option value="transferred_to_tailor" {% if status == 'transferred_to_tailor' %}selected{% endif %}>Transferred to Tailor</option>
+                </select>
+            </div>
+        </form>
+    </div>
+    
+    <div class="card">
+        {% if payments %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Order</th>
+                        <th>Customer</th>
+                        <th>Tailor</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Transaction ID</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in payments %}
+                    <tr>
+                        <td>#{{ payment.id }}</td>
+                        <td>#{{ payment.order.id }}</td>
+                        <td>{{ payment.order.customer.name }}</td>
+                        <td>{{ payment.order.tailor.name }}</td>
+                        <td>PKR {{ payment.amount }}</td>
+                        <td>
+                            <span class="badge badge-{{ payment.status }}">{{ payment.status|replace('_', ' ')|title }}</span>
+                        </td>
+                        <td><small>{{ payment.transaction_id }}</small></td>
+                        <td>{{ payment.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            {% if payment.status == 'paid_to_admin' and payment.order.status in ['completed', 'delivered'] %}
+                            <a href="{{ url_for('admin.transfer_payment', payment_id=payment.id) }}" class="btn btn-success btn-sm">Transfer</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-credit-card"></i>
+            <p>No payments found.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

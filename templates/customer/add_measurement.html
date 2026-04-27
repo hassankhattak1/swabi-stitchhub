@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Add Measurement - StitchHub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card" style="max-width: 700px; margin: 0 auto;">
+        <h2>Add Measurement</h2>
+        
+        <form method="POST">
+            <div class="form-group">
+                <label for="title">Measurement Title</label>
+                <input type="text" id="title" name="title" class="form-control" placeholder="e.g., Summer Suit" required>
+            </div>
+            
+            <h4 class="mt-2 mb-2">Measurements (in inches)</h4>
+            
+            <div class="measurement-grid">
+                <div class="form-group">
+                    <label for="chest">Chest</label>
+                    <input type="number" step="0.5" id="chest" name="chest" class="form-control" placeholder="0.0">
+                </div>
+                <div class="form-group">
+                    <label for="waist">Waist</label>
+                    <input type="number" step="0.5" id="waist" name="waist" class="form-control" placeholder="0.0">
+                </div>
+                <div class="form-group">
+                    <label for="hips">Hips</label>
+                    <input type="number" step="0.5" id="hips" name="hips" class="form-control" placeholder="0.0">
+                </div>
+                <div class="form-group">
+                    <label for="shoulder">Shoulder</label>
+                    <input type="number" step="0.5" id="shoulder" name="shoulder" class="form-control" placeholder="0.0">
+                </div>
+                <div class="form-group">
+                    <label for="sleeve_length">Sleeve Length</label>
+                    <input type="number" step="0.5" id="sleeve_length" name="sleeve_length" class="form-control" placeholder="0.0">
+                </div>
+                <div class="form-group">
+                    <label for="total_length">Top Length</label>
+                    <input type="number" step="0.5" id="total_length" name="total_length" class="form-control" placeholder="0.0">
+                </div>
+                <div class="form-group">
+                    <label for="neck">Neck</label>
+                    <input type="number" step="0.5" id="neck" name="neck" class="form-control" placeholder="0.0">
+                </div>
+                <div class="form-group">
+                    <label for="arm_length">Arm Length</label>
+                    <input type="number" step="0.5" id="arm_length" name="arm_length" class="form-control" placeholder="0.0">
+                </div>
+                <div class="form-group">
+                    <label for="pant_length">Pant Length</label>
+                    <input type="number" step="0.5" id="pant_length" name="pant_length" class="form-control" placeholder="0.0">
+                </div>
+            </div>
+            
+            <div class="d-flex gap-2 mt-2">
+                <button type="submit" class="btn btn-primary">Save Measurement</button>
+                <a href="{{ url_for('customer.measurements') }}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
